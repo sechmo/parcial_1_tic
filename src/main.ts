@@ -48,8 +48,8 @@ const createScene = async () => {
     '../',
     'casco.gltf',
     scene,
-    (meshes, particleSystems, skeletons, animationgGroups) => {
-      const model = meshes[0];
+    (meshes, _particleSystems, _skeletons, animationgGroups) => {
+      // const model = meshes[0];
 
 
 
