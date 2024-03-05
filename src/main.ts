@@ -95,7 +95,7 @@ const createScene = async () => {
   scene.onPointerDown = () => {
     const hit = scene.pick(scene.pointerX, scene.pointerY);
 
-    if (hit.pickedMesh?.name != "myText") {
+    if (hit.pickedMesh && hit.pickedMesh?.name != "myText") {
       console.log(isOpen);
       if (!isOpen && openAnim) {
         openAnim.play(false);
