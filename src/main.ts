@@ -45,7 +45,7 @@ const createScene = async () => {
   let isOpen = false;
   const casco = BABYLON.SceneLoader.ImportMesh(
     '',
-    '../',
+    '',
     'casco.gltf',
     scene,
     (meshes, _particleSystems, _skeletons, animationgGroups) => {
