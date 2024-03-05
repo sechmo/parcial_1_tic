@@ -114,11 +114,11 @@ const createScene = async () => {
 
 createScene().then((scene) => {
 
-engine.runRenderLoop(() => {
-  scene.render();
-});
+  engine.runRenderLoop(() => {
+    scene.render();
+  });
 
-window.addEventListener('resize', () => {
-  engine.resize();
-});
+  window.addEventListener('resize', () => {
+    engine.resize();
+  });
 });
