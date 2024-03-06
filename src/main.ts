@@ -34,16 +34,16 @@ const createFontData = async () => {
 const loadAssets = async (scene: BABYLON.Scene) => {
 
 
-  const facSound = new BABYLON.Sound("factory",'factory.mp3',scene, null, {
+  new BABYLON.Sound("factory",'factory.mp3',scene, null, {
     loop: true,
     autoplay: false,
   })
-  const mufSound = new BABYLON.Sound("muff",'muff.mp3',scene, null, {
+  new BABYLON.Sound("muff",'muff.mp3',scene, null, {
     loop: true,
     autoplay: false,
   })
 
-  const niceSound = new BABYLON.Sound("nice",'DivKid.mp3',scene, null, {
+  new BABYLON.Sound("nice",'DivKid.mp3',scene, null, {
     loop: true,
     autoplay: false,
   })

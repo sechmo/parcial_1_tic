@@ -102,7 +102,7 @@ const explainState: State = {
 
         }
     },
-    cleanState: (scene: BABYLON.Scene,ctx,callback) => {
+    cleanState: (scene: BABYLON.Scene,_ctx,callback) => {
 
         delete scene.onPointerDown;
         cleanText(scene);

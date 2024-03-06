@@ -60,7 +60,7 @@ const happyState: State = {
         inWorkerAnim?.play()
 
     },
-    cleanState: (scene: BABYLON.Scene,ctx, callback) => {
+    cleanState: (scene: BABYLON.Scene,_ctx, callback) => {
         const worker = scene.getMeshByName('worker')
         if (!worker) {
             return;
