@@ -34,6 +34,20 @@ const createFontData = async () => {
 const loadAssets = async (scene: BABYLON.Scene) => {
 
 
+  const facSound = new BABYLON.Sound("factory",'factory.mp3',scene, null, {
+    loop: true,
+    autoplay: false,
+  })
+  const mufSound = new BABYLON.Sound("muff",'muff.mp3',scene, null, {
+    loop: true,
+    autoplay: false,
+  })
+
+  const niceSound = new BABYLON.Sound("nice",'DivKid.mp3',scene, null, {
+    loop: true,
+    autoplay: false,
+  })
+
   BABYLON.SceneLoader.ImportMesh('', '', 'casco.gltf', scene, importCascoCallBack)
 
   BABYLON.SceneLoader.ImportMesh('', '', 'worker.gltf', scene,
@@ -42,7 +56,16 @@ const loadAssets = async (scene: BABYLON.Scene) => {
 
 
   BABYLON.SceneLoader.ImportMesh('', '', 'workerHappy.gltf', scene,
-    importWorkerCallback("workerHappy")
+    (meshes) => {
+      meshes[0].setEnabled(false);
+      meshes[0].name = "workerHappy"
+      meshes[1].name = "bodyHappy"
+      if (meshes[2].material) {
+        meshes[2].material.name = "cabezaHappy";
+        meshes[2].name = 'cabezaHappy'
+
+      }
+    }
   );
 
   const envTexture = new BABYLON.CubeTexture("environment.env", scene);

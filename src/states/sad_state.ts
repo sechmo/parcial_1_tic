@@ -9,6 +9,8 @@ const sadState: State = {
         }
         worker.setEnabled(true);
 
+        const facSound = scene.getSoundByName('factory');
+        facSound?.play()
         const inWorkerAnim = scene.getAnimationGroupByName("IN_WORKER");
 
         inWorkerAnim?.play()
@@ -19,6 +21,7 @@ const sadState: State = {
         if (!worker) {
             return;
         }
+        const facSound = scene.getSoundByName('factory');
 
         const outWorkerAnim = scene.getAnimationGroupByName("OUT_WORKER");
 
@@ -28,6 +31,7 @@ const sadState: State = {
                 console.log("miau");
                 worker.position.z += 10
                 
+                facSound?.stop();
                 
                 callback()
             })

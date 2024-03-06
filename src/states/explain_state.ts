@@ -61,6 +61,10 @@ const explainState: State = {
             return;
         }
 
+
+        const niceSound = scene.getSoundByName('nice');
+        niceSound?.play()
+
         openAnim.loopAnimation = false;
         openAnim.stop()
         closeAnim.loopAnimation = false;
@@ -108,6 +112,9 @@ const explainState: State = {
             return;
         }
 
+
+        const niceSound = scene.getSoundByName('nice');
+
         const closeAnim = scene.getAnimationGroupByName("CLOSE")
         const outCascoAnim = scene.getAnimationGroupByName("OUT_CASCO")
         if (closeAnim && outCascoAnim) {
@@ -115,6 +122,7 @@ const explainState: State = {
             outCascoAnim.onAnimationEndObservable.addOnce(() => {
                 casco.setEnabled(false);
                 casco.position.y = casco.position.y - 10;
+                niceSound?.stop();
                 callback();
             })
 

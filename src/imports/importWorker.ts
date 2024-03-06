@@ -83,4 +83,11 @@ export const importWorkerCallback:(name: string) => BABYLON.SceneLoaderSuccessCa
       inAnim(model,name);
       outAnim(model,name);
 
+
+      if (meshes[2].material) {
+        meshes[2].material.name = "cabezaSad";
+
+      }
+      
+
     }
