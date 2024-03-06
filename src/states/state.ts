@@ -1,12 +1,13 @@
 import * as BABYLON from '@babylonjs/core';
 
 type context = {
-    fontData: any
+    fontData: BABYLON.IFontData
 }
 
+type cleanCallback = () => void;
 export interface State {
     loadState: (scene: BABYLON.Scene, ctx: context) => void;
-    cleanState: (scene:BABYLON.Scene, ctx: context) => void;
+    cleanState: (scene:BABYLON.Scene, ctx: context, callback: cleanCallback) => void;
 }
 
 
@@ -42,9 +43,10 @@ export class StateManager {
 
     public changeIfRequested(): void {
         if (this.stateChange) {
-            this.currentState.cleanState(this.scene,this.ctx);
+            this.currentState.cleanState(this.scene,this.ctx, () => {
+                this.nextState.loadState(this.scene, this.ctx);
+            });
             this.currentState = this.nextState;
-            this.currentState.loadState(this.scene,this.ctx);
             this.stateChange = false;
         }
     }

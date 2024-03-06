@@ -2,9 +2,13 @@ import * as BABYLON from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 
 import * as S from './states';
+import { importCascoCallBack } from './imports/importCasco';
+import { importWorkerCallback } from './imports/importWorker';
 
 const canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
-const expBtn = document.getElementById("explicarBtn") as HTMLButtonElement;
+const problemBtn = document.getElementById("problemaBtn") as HTMLButtonElement;
+const solucionBtn = document.getElementById("solucionBtn") as HTMLButtonElement;
+const modeloBtn = document.getElementById("modeloBtn") as HTMLButtonElement;
 
 const engine = new BABYLON.Engine(canvas);
 
@@ -24,57 +28,26 @@ const createFontData = async () => {
   // if (text != null) {
   //   text.position = new BABYLON.Vector3(0, 0, +10);
   // }
-  return fontData;
+  return fontData as BABYLON.IFontData;
 }
 
 const loadAssets = async (scene: BABYLON.Scene) => {
 
 
-  BABYLON.SceneLoader.ImportMesh('','','casco.gltf',scene, 
-    (meshes, _particleSystems, _skeletons, animationgGroups) => {
-      const model = meshes[0];
-      model.setEnabled(false);
-      model.name = 'casco';
+  BABYLON.SceneLoader.ImportMesh('', '', 'casco.gltf', scene, importCascoCallBack)
+
+  BABYLON.SceneLoader.ImportMesh('', '', 'worker.gltf', scene,
+    importWorkerCallback("worker")
+  );
 
 
-      const mats = [
-        meshes[1].material as BABYLON.PBRMaterial,
-        meshes[2].material as BABYLON.PBRMaterial,
-        meshes[3].material as BABYLON.PBRMaterial,
-        meshes[4].material as BABYLON.PBRMaterial,
-        meshes[5].material as BABYLON.PBRMaterial,
-        meshes[6].material as BABYLON.PBRMaterial,
-        meshes[13].material as BABYLON.PBRMaterial,
-        meshes[14].material as BABYLON.PBRMaterial,
-      ]
-
-      mats.forEach((m, i) => {
-        if (i == 3) {
-          m.transparencyMode = 3;
-          m.alpha = 0.69;
-          return;
-        }
-
-        if (i == 2 || i == 5) {
-          return;
-        }
-        m.metallic = 1.0;
-        m.roughness = 0.3;
-      })
-
-      console.log(animationgGroups);
-    }
-  )
-
-  BABYLON.SceneLoader.ImportMesh('','','worker.gltf',scene,
-    (meshes) => {
-      const model = meshes[0];
-      model.name = 'worker';
-    }
-  )
+  BABYLON.SceneLoader.ImportMesh('', '', 'workerHappy.gltf', scene,
+    importWorkerCallback("workerHappy")
+  );
 
   const envTexture = new BABYLON.CubeTexture("environment.env", scene);
   envTexture.name = "envTexture"
+
 }
 
 const setupEnvironment = async (scene: BABYLON.Scene) => {
@@ -87,7 +60,7 @@ const setupEnvironment = async (scene: BABYLON.Scene) => {
 
   // Light and camera
   scene.createDefaultLight()
-  const camera = new BABYLON.ArcRotateCamera('camera', 2 * Math.PI * 1 / 4, Math.PI / 2, 20, new BABYLON.Vector3(0, 0, 0),scene)
+  const camera = new BABYLON.ArcRotateCamera('camera', 2 * Math.PI * 1 / 4, Math.PI / 2, 20, new BABYLON.Vector3(0, 0, 0), scene)
   camera.attachControl(true);
   camera.inputs.addMouseWheel();
 }
@@ -103,13 +76,22 @@ const initScene = async (scene: BABYLON.Scene) => {
 
 
 
-Promise.all([initScene(createScene()), createFontData()]).then(([scene,fontData]) => {
+Promise.all([initScene(createScene()), createFontData()]).then(([scene, fontData]) => {
   const StateManager = new S.StateManager(S.sadState, scene, { fontData });
 
-  expBtn.onclick = () => {
+  modeloBtn.onclick = () => {
+    StateManager.requestChange(S.explainState);
+  }
+  problemBtn.onclick = () => {
+    StateManager.requestChange(S.sadState);
+  }
+
+  solucionBtn.onclick = () => {
     StateManager.requestChange(S.happyState);
   }
 
+
+  StateManager.start();
   engine.runRenderLoop(() => {
     StateManager.changeIfRequested()
 
