@@ -1,3 +1,4 @@
+import { playAsync } from "../util/animations";
 import { State } from "./state";
 import * as BABYLON from '@babylonjs/core';
 
@@ -48,7 +49,7 @@ const texts2 = {
 }
 
 const explainState: State = {
-    loadState: (scene: BABYLON.Scene, ctx) => {
+    loadState: async (scene: BABYLON.Scene, ctx) => {
         const casco = scene.getMeshByName('casco')
         if (!casco) {
             return;
@@ -102,7 +103,7 @@ const explainState: State = {
 
         }
     },
-    cleanState: (scene: BABYLON.Scene,_ctx,callback) => {
+    cleanState: async (scene: BABYLON.Scene,_ctx) => {
 
         delete scene.onPointerDown;
         cleanText(scene);
@@ -119,17 +120,13 @@ const explainState: State = {
         const outCascoAnim = scene.getAnimationGroupByName("OUT_CASCO")
         if (closeAnim && outCascoAnim) {
 
-            outCascoAnim.onAnimationEndObservable.addOnce(() => {
-                casco.setEnabled(false);
-                casco.position.y = casco.position.y - 10;
-                niceSound?.stop();
-                callback();
-            })
+            await playAsync(closeAnim);
 
-            closeAnim.onAnimationEndObservable.addOnce(() => {
-                outCascoAnim.play();
-            })
-            closeAnim.play(false);
+            await playAsync(outCascoAnim);
+
+            casco.setEnabled(false);
+            casco.position.y = casco.position.y - 10;
+            niceSound?.stop();
 
             
         }

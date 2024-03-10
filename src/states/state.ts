@@ -1,13 +1,13 @@
 import * as BABYLON from '@babylonjs/core';
 
-type context = {
+export type context = {
     fontData: BABYLON.IFontData
 }
 
-type cleanCallback = () => void;
+export type cleanCallback = () => Promise<void>;
 export interface State {
-    loadState: (scene: BABYLON.Scene, ctx: context) => void;
-    cleanState: (scene:BABYLON.Scene, ctx: context, callback: cleanCallback) => void;
+    loadState: (scene: BABYLON.Scene, ctx: context) => Promise<void>;
+    cleanState: (scene: BABYLON.Scene, ctx: context) => Promise<void>;
 }
 
 
@@ -18,21 +18,23 @@ export class StateManager {
     private stateChange: boolean = false;
     private scene: BABYLON.Scene
     private ctx: context
-    
+    private isChangingState = false;
+
     constructor(initialState: State, scene: BABYLON.Scene, ctx: context) {
-        this.initialState = initialState; 
+        this.initialState = initialState;
         this.currentState = initialState;
         this.nextState = initialState;
         this.scene = scene;
         this.ctx = ctx;
     }
 
+
     public start(): void {
         this.initialState.loadState(this.scene, this.ctx)
     }
 
     public requestChange(newState: State): boolean {
-        if (this.stateChange) {
+        if (this.stateChange || this.isChangingState) {
             return false;
         }
         this.nextState = newState;
@@ -42,15 +44,18 @@ export class StateManager {
 
 
     public changeIfRequested(): void {
-        if (this.stateChange) {
-            this.currentState.cleanState(this.scene,this.ctx, () => {
-                this.nextState.loadState(this.scene, this.ctx);
-            });
-            this.currentState = this.nextState;
-            this.stateChange = false;
+        if (this.stateChange && !this.isChangingState) {
+            this.isChangingState = true;
+
+            this.currentState.cleanState(this.scene, this.ctx).then(async () => {
+                console.log("fin de estado terminado");
+                console.log("iniciado nuevo estado");
+                await this.nextState.loadState(this.scene, this.ctx);
+                this.isChangingState = false;
+                this.currentState = this.nextState;
+                this.stateChange = false;
+            })
         }
     }
-
-
 
 }
