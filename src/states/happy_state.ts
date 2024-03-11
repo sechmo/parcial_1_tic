@@ -1,144 +1,60 @@
 import { playAsync } from "../util/animations";
-import { State, cleanCallback, context } from "./state";
+import { getAnimationGroupOrThrow, getMaterialOrThrow, getMeshOrThrow, getSoundOrThrow } from "../util/asset";
+import { State, context } from "./state";
 import * as BABYLON from '@babylonjs/core';
 
-class HappyState implements State {
-    async loadState(scene: BABYLON.Scene) {
-        // console.log("Se inicia happy state")
-        const worker = scene.getMeshByName('worker')
-        if (!worker) {
-            throw "worker mesh not found"
-        }
+const happyState: State =  {
+    loadState: async (scene: BABYLON.Scene) => {
+
+        const earmuffMesh = getMeshOrThrow(scene, 'casco');
+        const workerMesh = getMeshOrThrow(scene, 'worker');
+        const downEarmuffAnimation = getAnimationGroupOrThrow(scene, "IN_CASCO");
+        const inWorkerAnimation = getAnimationGroupOrThrow(scene, "IN_WORKER");
+        const happyHeadMaterial = getMaterialOrThrow(scene, "cabezaHappy");
+        const factorySound = getSoundOrThrow(scene, 'factory');
+        const muffedFactorySound = getSoundOrThrow(scene, 'muff');
+        const headMesh = getMeshOrThrow(scene, "Head");
 
 
-        const casco = scene.getMeshByName('casco')
-        if (!casco) {
-            throw "casco mesh not found"
-        }
+        workerMesh.setEnabled(true);
 
-        const downCascoAnim = scene.getAnimationGroupByName("IN_CASCO")
+        factorySound.play();
 
-        if (!downCascoAnim) {
-            throw "Casco enter anim not found";
-        }
+        await playAsync(inWorkerAnimation);
 
-        worker.setEnabled(true);
+        earmuffMesh.setEnabled(true);
 
-        const inWorkerAnim = scene.getAnimationGroupByName("IN_WORKER");
-        if (!inWorkerAnim) {
-            throw "Worker enter anim not found";
-        }
+        await playAsync(downEarmuffAnimation);
 
-        const happyMat = scene.getMaterialByName("cabezaHappy");
-        if (!happyMat) {
-            throw "cabezaHappy material not found"
-        }
+        headMesh.material = happyHeadMaterial;
+        factorySound?.stop();
+        muffedFactorySound?.play();
+    },
+    cleanState: async (scene: BABYLON.Scene, _ctx: context) => {
 
-        const facSound = scene.getSoundByName('factory');
-        const muffSound = scene.getSoundByName('muff');
-        facSound?.play();
+        const workerMesh = getMeshOrThrow(scene, 'worker');
+        const earmuffsMesh = getMeshOrThrow(scene, 'casco');
+        const outWorkerAnimation = getAnimationGroupOrThrow(scene, "OUT_WORKER");
+        const outEarmuffsAnimation = getAnimationGroupOrThrow(scene, "OUT_CASCO");
+        const factorySound = getSoundOrThrow(scene, 'factory');
+        const muffledFactorySound = getSoundOrThrow(scene, 'muff');
+        const sadHeadMaterial = getMaterialOrThrow(scene, "cabezaSad");
+        const headMesh = getMeshOrThrow(scene, "Head");
 
 
-        await playAsync(inWorkerAnim);
+        headMesh.material = sadHeadMaterial;
+        muffledFactorySound.stop();
+        factorySound.play();
 
-        casco.setEnabled(true);
+        await playAsync(outEarmuffsAnimation);
+        earmuffsMesh.setEnabled(false);
+        earmuffsMesh.position.y -= 10;
 
-        await playAsync(downCascoAnim);
-
-        const cabeza = scene.getMeshByName("Head");
-        if (!cabeza) {
-            throw "Head mesh not found"
-        }
-        cabeza.material = happyMat;
-        facSound?.stop();
-        muffSound?.play();
-
-
-
-
-
-
-
-    }
-    async cleanState(scene: BABYLON.Scene, _ctx: context) {
-
-        const worker = scene.getMeshByName('worker')
-        if (!worker) {
-            return;
-        }
-
-        const casco = scene.getMeshByName('casco')
-        if (!casco) {
-            return;
-
-
-        }
-
-
-        const downCascoAnim = scene.getAnimationGroupByName("IN_CASCO")
-
-        if (!downCascoAnim) {
-            throw "Casco enter anim not found";
-        }
-        const inWorkerAnim = scene.getAnimationGroupByName("IN_WORKER");
-
-        if (!inWorkerAnim) {
-            throw "Worker enter anim not found";
-        }
-
-
-        const happyMat = scene.getMaterialByName("cabezaHappy");
-        if (!happyMat) {
-            return;
-        }
-
-        const outWorkerAnim = scene.getAnimationGroupByName("OUT_WORKER");
-
-        if (!outWorkerAnim) {
-            throw "OUT_WORKER animation not found";
-        }
-
-        const outCascoAnim = scene.getAnimationGroupByName("OUT_CASCO")
-
-        if (!outCascoAnim) {
-            throw "OUT_CASCO animation not found";
-        }
-
-
-        const facSound = scene.getSoundByName('factory');
-        const muffSound = scene.getSoundByName('muff');
-
-        const sadMat = scene.getMaterialByName("cabezaSad");
-        if (!sadMat) {
-            throw "No hay material triste"
-        }
-
-        const cabeza = scene.getMeshByName("Head");
-        if (!cabeza) {
-            throw "No hay cabeza"
-        }
-        cabeza.material = sadMat;
-
-        if (!muffSound) {
-            throw "No hay muff sound"
-        }
-        muffSound.stop();
-
-        if (!facSound) {
-            throw "no hay fac sound"
-        }
-
-        facSound.play();
-        await playAsync(outCascoAnim);
-        casco.setEnabled(false);
-        casco.position.y -= 10;
-        await playAsync(outWorkerAnim);
-        worker.setEnabled(false);
-        worker.position.z += 10
-        facSound.stop()
+        await playAsync(outWorkerAnimation);
+        workerMesh.setEnabled(false);
+        workerMesh.position.z += 10
+        factorySound.stop()
     }
 }
-
-const happyState: State = new HappyState();
 
 export { happyState }

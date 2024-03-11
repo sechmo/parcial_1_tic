@@ -1,4 +1,5 @@
 import { playAsync } from "../util/animations";
+import { getAnimationGroupOrThrow, getMeshOrThrow, getSoundOrThrow } from "../util/asset";
 import { State } from "./state";
 import * as BABYLON from '@babylonjs/core';
 
@@ -50,38 +51,28 @@ const texts2 = {
 
 const explainState: State = {
     loadState: async (scene: BABYLON.Scene, ctx) => {
-        const casco = scene.getMeshByName('casco')
-        if (!casco) {
-            return;
-        }
-        const openAnim = scene.getAnimationGroupByName("OPEN");
-        const closeAnim = scene.getAnimationGroupByName("CLOSE")
-        const downCascoAnim = scene.getAnimationGroupByName("IN_CASCO")
-
-        if (!openAnim || !closeAnim || !downCascoAnim) {
-            return;
-        }
+        const earmuffsMesh = getMeshOrThrow(scene, 'casco');
+        const openEarmuffsAnimation = getAnimationGroupOrThrow(scene, "OPEN");
+        const closeEarmuffsAnimation = getAnimationGroupOrThrow(scene, "CLOSE")
+        const inEarmuffsAnimation = getAnimationGroupOrThrow(scene, "IN_CASCO")
+        const niceAmbientSound = getSoundOrThrow(scene, 'nice');
 
 
-        const niceSound = scene.getSoundByName('nice');
-        niceSound?.play()
+        niceAmbientSound.play()
 
-        openAnim.loopAnimation = false;
-        openAnim.stop()
-        closeAnim.loopAnimation = false;
+        openEarmuffsAnimation.loopAnimation = false;
+        openEarmuffsAnimation.stop()
+        closeEarmuffsAnimation.loopAnimation = false;
 
-        casco.setEnabled(true);
-        casco.position.y = casco.position.y + 10;
+        earmuffsMesh.setEnabled(true);
+        earmuffsMesh.position.y = earmuffsMesh.position.y + 10;
 
-        downCascoAnim.onAnimationEndObservable.addOnce(
+        inEarmuffsAnimation.onAnimationEndObservable.addOnce(
             () => {
-                openAnim.play();
+                openEarmuffsAnimation.play();
             }
         )
-        downCascoAnim.play();
-
-        
-
+        inEarmuffsAnimation.play();
 
 
         scene.onPointerDown = () => {
@@ -92,46 +83,35 @@ const explainState: State = {
 
                 if (/(R|L)\d/.test(name)) {
                     const index = name[1] as (keyof typeof texts)
-                    addText(scene,ctx.fontData, texts[index])
+                    addText(scene, ctx.fontData, texts[index])
                 }
                 else if (/H\d/.test(name)) {
                     const index = name[1] as (keyof typeof texts2)
-                    addText(scene,ctx.fontData, texts2[index])
+                    addText(scene, ctx.fontData, texts2[index])
                 }
 
             }
 
         }
     },
-    cleanState: async (scene: BABYLON.Scene,_ctx) => {
+    cleanState: async (scene: BABYLON.Scene, _ctx) => {
 
         delete scene.onPointerDown;
         cleanText(scene);
 
-        const casco = scene.getMeshByName('casco')
-        if (!casco) {
-            return;
-        }
+        const earmuffsMesh = getMeshOrThrow(scene, 'casco')
 
+        const niceAmbienSound = getSoundOrThrow(scene, 'nice');
+        const closeEarmuffsAnimation = getAnimationGroupOrThrow(scene, "CLOSE")
+        const outEarmuffsAnimation = getAnimationGroupOrThrow(scene, "OUT_CASCO")
 
-        const niceSound = scene.getSoundByName('nice');
+        await playAsync(closeEarmuffsAnimation);
 
-        const closeAnim = scene.getAnimationGroupByName("CLOSE")
-        const outCascoAnim = scene.getAnimationGroupByName("OUT_CASCO")
-        if (closeAnim && outCascoAnim) {
+        await playAsync(outEarmuffsAnimation);
 
-            await playAsync(closeAnim);
-
-            await playAsync(outCascoAnim);
-
-            casco.setEnabled(false);
-            casco.position.y = casco.position.y - 10;
-            niceSound?.stop();
-
-            
-        }
-
-
+        earmuffsMesh.setEnabled(false);
+        earmuffsMesh.position.y = earmuffsMesh.position.y - 10;
+        niceAmbienSound?.stop();
 
     }
 }

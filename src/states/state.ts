@@ -42,19 +42,24 @@ export class StateManager {
         return true;
     }
 
+    private async changeState() {
+        try {
+            await this.currentState.cleanState(this.scene, this.ctx);
+            console.log("fin de estado terminado");
+            console.log("iniciado nuevo estado");
+            await this.nextState.loadState(this.scene, this.ctx);
+            this.isChangingState = false;
+            this.currentState = this.nextState;
+            this.stateChange = false;
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     public changeIfRequested(): void {
         if (this.stateChange && !this.isChangingState) {
             this.isChangingState = true;
-
-            this.currentState.cleanState(this.scene, this.ctx).then(async () => {
-                console.log("fin de estado terminado");
-                console.log("iniciado nuevo estado");
-                await this.nextState.loadState(this.scene, this.ctx);
-                this.isChangingState = false;
-                this.currentState = this.nextState;
-                this.stateChange = false;
-            })
+            this.changeState();
         }
     }
 
