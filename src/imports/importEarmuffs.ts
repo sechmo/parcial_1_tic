@@ -7,6 +7,8 @@ export const importEarmuffsCallBack: BABYLON.SceneLoaderSuccessCallback = (meshe
   model.setEnabled(false);
   model.name = 'earmuffs';
 
+  model.rotate(BABYLON.Axis.Y, Math.PI, BABYLON.Space.WORLD);
+
 
 
   const mats = [

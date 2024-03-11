@@ -39,9 +39,9 @@ body .overlay,
 
 body #extraUI {
   position: fixed;
-  top: 30vh;
-  left: 10vw;
-  transform: translate(-50%, -50%);
+  top: 50vh;
+  left: 3vw;
+  transform: translate(0, -50%);
   z-index: 2;
 }
 
@@ -99,6 +99,19 @@ body #extraUI {
   margin: 16px;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
   position: relative;
+  max-width: 30vw;
+  overflow: scroll;
+  max-height: 60vh;
+}
+#extraUI .info ol {
+  font-size: 11px;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+#extraUI .info ul {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 12px;
 }
 
 #extraUI .info::before {
@@ -126,30 +139,12 @@ body #extraUI {
   margin-bottom: 0;
 }
 
-@media (max-width: 480px) {
-  .overlay {
-    flex-direction: column;
-  }
-
-  .overlay button {
-    margin: 8px 0;
-  }
-
-  body #extraUI {
-    position: fixed;
-    top: 70vh;
-    left: 50vw;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-  }
-}
-
 .about-btn {
   background-color: #b77d4a;
   color: #fffdf7;
   border: 2px solid #7f5632;
   border-radius: 4px;
-  padding: 8px 16px;
+  padding: 8px;
   font-size: 16px;
   font-weight: bold;
   text-transform: uppercase;
@@ -164,8 +159,8 @@ body #extraUI {
 }
 
 .info-icon {
-  font-size: 20px;
-  margin-right: 8px;
+  font-size: 25px;
+  line-height: 26px;
 }
 
 .modal {
@@ -198,4 +193,31 @@ body #extraUI {
   font-size: 28px;
   font-weight: bold;
   cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .overlay {
+    flex-direction: column;
+  }
+
+  .overlay button {
+    margin: 8px 0;
+  }
+
+  body #extraUI {
+    position: fixed;
+    top: 75vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    z-index: 2;
+  }
+  #extraUI .info {
+    max-width: 90vw;
+    max-height: 25vh;
+  }
+
+  .about-btn {
+    bottom: 1vh;
+  }
 }

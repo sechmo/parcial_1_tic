@@ -10,8 +10,28 @@ const createInfo = () => {
     const infoText = document.createElement("div");
     infoText.classList.add('info');
     infoText.innerHTML = `
-        <p>La solución</p>
-        <p>Fue</p>
+<h2><strong>Protectores Auditivos Ford - PAF</strong></h2>
+<p>Desarrollar unos protectores auditivos especialmente diseñados para los trabajadores de las fábricas Ford, hechos con materiales de la época. Podrían ser orejeras acolchadas que cubran toda la oreja, fabricadas con cuero suave en el exterior y rellenas de algodón u otro material aislante del ruido en el interior.</p>
+
+<p>Se sujetarían con una banda ajustable sobre la cabeza o detrás del cuello para un ajuste seguro y cómodo. El diseño sería ergonómico para permitir varias horas de uso. </p>
+
+<h3>Beneficios</h3>
+<ul>
+	<li>Reducen la exposición al ruido dañino en 20-30 dB, llevándolo a niveles más seguros</li>
+	<li>Protegen la audición de los trabajadores, reduciendo problemas como tinnitus y pérdida auditiva</li>
+	<li>Aumentan el confort y concentración, reducen el estrés, mejorando la productividad</li>
+	<li>Crean una cultura de seguridad e innovación en Ford, posicionándola como líder</li>
+</ul>
+
+<h3>Implementación</h3>
+<ul>
+	<li>Crear prototipos y probarlos con trabajadores para optimizar diseño y materiales</li>
+	<li>Producir los PAF en la misma fábrica, generando empleos y reduciendo costos</li>
+	<li>Proporcionarlos a todos los trabajadores expuestos a ruido, con capacitación sobre su importancia y uso correcto</li>
+	<li>Convertirlos en parte del uniforme y cultura de seguridad de Ford</li>
+</ul>
+
+Esta solución ataca de raíz el problema del ruido, usando creativamente los recursos disponibles en la época para proteger activamente la salud auditiva de los trabajadores, en vez de solo aceptar los daños como inevitables. Sería una innovación destacable para 1909 que mejoraría las condiciones laborales y podría generar ahorros al reducir problemas de salud ocupacionales.
          `;
     extraUI.appendChild(infoText);
 }
