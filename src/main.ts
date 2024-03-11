@@ -1,7 +1,7 @@
 import * as BABYLON from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
-import '@babylonjs/core/Debug/debugLayer';
-import * as I from '@babylonjs/inspector';
+// import '@babylonjs/core/Debug/debugLayer';
+// import * as I from '@babylonjs/inspector';
 
 
 import * as S from './states';
@@ -115,7 +115,24 @@ Promise.all([initScene(createScene()), createFontData()]).then(([scene, fontData
   window.addEventListener('resize', () => {
     engine.resize();
   });
-  
+
+  const modal = document.getElementById("aboutModal") as HTMLDivElement;
+  const btn = document.querySelector(".about-btn") as HTMLButtonElement;
+  const span = document.getElementsByClassName("close")[0] as HTMLSpanElement;
+
+  btn.onclick = function () {
+    modal.style.display = "block";
+  }
+
+  span.onclick = function () {
+    modal.style.display = "none";
+  }
+
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
 
   // I.Inspector.Show(scene, {});
 })

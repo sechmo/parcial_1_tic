@@ -48,7 +48,6 @@ export const createMovementAnimation = (
 }
 
 export const createFadeAnimation = (
-  material: BABYLON.PBRMaterial,
   name: string,
   inOut: 'in' | 'out',
   easeFunction: BABYLON.EasingFunction,

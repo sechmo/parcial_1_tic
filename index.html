@@ -1,20 +1,38 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="src/style.css"/>
-    <title>PARCIAL I - TICS</title>
-  </head>
-  <body>
-    <canvas id="renderCanvas"></canvas>
-    <div class="overlay">
-      <button id="problemaBtn">Problema</button>
-      <button id="solucionBtn">Solucion</button>
-      <button id="modeloBtn">Modelo</button>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="src/style.css" />
+  <title>PARCIAL I - TICS</title>
+</head>
+
+<body>
+  <canvas id="renderCanvas"></canvas>
+  <div class="overlay">
+    <button id="problemaBtn">Problema</button>
+    <button id="solucionBtn">Solución</button>
+    <button id="modeloBtn">Modelo</button>
+  </div>
+
+  <div id="extraUI">
+  </div>
+  <button class="about-btn">
+    <span class="info-icon">&#9432;</span> About
+  </button>
+
+  <div class="modal" id="aboutModal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Credits</h2>
+      <p>Here you can display your credits and acknowledgments.</p>
+      <!-- Add your credit information here -->
     </div>
-    <script src="https://unpkg.com/earcut@2.2.4/dist/earcut.min.js"></script>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+  </div>
+  <script src="https://unpkg.com/earcut@2.2.4/dist/earcut.min.js"></script>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
 </html>

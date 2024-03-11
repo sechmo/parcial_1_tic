@@ -1,12 +1,12 @@
 
 import * as BABYLON from '@babylonjs/core';
-import { createFadeAnimation, createMovementAnimation } from '../util/animations';
+import { createMovementAnimation } from '../util/animations';
 
 export const importWorkerCallback: (name: string) => BABYLON.SceneLoaderSuccessCallback = name => (meshes) => {
   const model = meshes[0];
   model.setEnabled(false);
   model.name = name;
-  const inAnimationGroup = createMovementAnimation(model, name, 'in', 'z', 10, new BABYLON.BackEase());
+  createMovementAnimation(model, name, 'in', 'z', 10, new BABYLON.BackEase());
   createMovementAnimation(model, name, 'out', 'z', 10, new BABYLON.BackEase());
 
   // Transparency does not really work

@@ -2,32 +2,59 @@ import { playAsync } from "../util/animations";
 import { getAnimationGroupOrThrow, getMeshOrThrow, getSoundOrThrow, getTextureOrThrow } from "../util/asset";
 import { State, context } from "./state";
 import * as BABYLON from '@babylonjs/core';
+
+
+
+const createInfo = () => {
+    const extraUI = document.getElementById("extraUI") as HTMLDivElement;
+    const infoText = document.createElement("div");
+    infoText.classList.add('info');
+    infoText.innerHTML = `
+        <p>La solución</p>
+        <p>Fue</p>
+         `;
+    extraUI.appendChild(infoText);
+}
+
+const deleteInfo = () => {
+    const extraUI = document.getElementById('extraUI') as HTMLDivElement;
+
+    // Get a reference to the info-text div
+    const infoTextDiv = extraUI.querySelector('.info');
+
+    // Check if the info-text div exists
+    if (infoTextDiv) {
+        // Remove the info-text div from the extraUI div
+        extraUI.removeChild(infoTextDiv);
+    }
+}
+
 function waitForCondition(condition: () => boolean, maxWaitTime = 5000) {
-  const startTime = Date.now();
+    const startTime = Date.now();
 
-  return new Promise((resolve, reject) => {
-    const checkCondition = () => {
-      if (condition()) {
-        resolve(undefined);
-      } else if (Date.now() - startTime > maxWaitTime) {
-        reject(new Error('Timeout: Condition not met within the specified time'));
-      } else {
-        setTimeout(checkCondition, 50);
-      }
-    };
+    return new Promise((resolve, reject) => {
+        const checkCondition = () => {
+            if (condition()) {
+                resolve(undefined);
+            } else if (Date.now() - startTime > maxWaitTime) {
+                reject(new Error('Timeout: Condition not met within the specified time'));
+            } else {
+                setTimeout(checkCondition, 50);
+            }
+        };
 
-    checkCondition();
-  });
+        checkCondition();
+    });
 }
 
 let isPlayingFade = false;
 let usingEarmuffs = true;
 // Example usage
 const isNotFading = () => {
-  // Your condition logic here
-  return !isPlayingFade;
+    // Your condition logic here
+    return !isPlayingFade;
 };
-const happyState: State =  {
+const happyState: State = {
     loadState: async (scene: BABYLON.Scene) => {
 
         const earmuffMesh = getMeshOrThrow(scene, 'earmuffs');
@@ -44,6 +71,10 @@ const happyState: State =  {
         const fadeinEarmuffsAnimation = getAnimationGroupOrThrow(scene, "FADE_IN_EARMUFFS")
 
 
+        // Add text div to explain the problem inside extraUI
+        createInfo();
+
+
 
         workerMesh.setEnabled(true);
 
@@ -58,7 +89,7 @@ const happyState: State =  {
 
         (headMesh.material as BABYLON.PBRMaterial).albedoTexture = happyHeadTexture;
         factorySound.stop();
-        muffledFactorySound.play(0,factorySound.currentTime);
+        muffledFactorySound.play(0, factorySound.currentTime);
 
         scene.onPointerDown = async () => {
             const hit = scene.pick(scene.pointerX, scene.pointerY);
@@ -101,8 +132,8 @@ const happyState: State =  {
     },
     cleanState: async (scene: BABYLON.Scene, _ctx: context) => {
 
-        delete  scene.onPointerDown;
-        await waitForCondition(isNotFading,5000);
+        delete scene.onPointerDown;
+        await waitForCondition(isNotFading, 5000);
 
 
 
@@ -115,7 +146,6 @@ const happyState: State =  {
         const muffledFactorySound = getSoundOrThrow(scene, 'muff');
         const headMesh = getMeshOrThrow(scene, "Head");
         const sadHeadTexture = getTextureOrThrow(scene, "sadHead");
-        const happyHeadTexture = getTextureOrThrow(scene, "happyHead");
         const fadeinEarmuffsAnimation = getAnimationGroupOrThrow(scene, "FADE_IN_EARMUFFS");
 
 
@@ -125,7 +155,7 @@ const happyState: State =  {
         }
         else {
             muffledFactorySound.stop();
-            factorySound.play(0,muffledFactorySound.currentTime);
+            factorySound.play(0, muffledFactorySound.currentTime);
         }
         (headMesh.material as BABYLON.PBRMaterial).albedoTexture = sadHeadTexture;
 
@@ -137,7 +167,10 @@ const happyState: State =  {
         workerMesh.setEnabled(false);
         workerMesh.position.z += 10
         factorySound.stop()
+
+        deleteInfo();
     }
+
 }
 
 export { happyState }

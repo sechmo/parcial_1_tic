@@ -52,13 +52,13 @@ export const importEarmuffsCallBack: BABYLON.SceneLoaderSuccessCallback = (meshe
     const easeFunctionFadeOut = new BABYLON.QuarticEase()
     easeFunctionFadeOut.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEOUT);
 
-    const animationFadeOut = createFadeAnimation(mat,`FADE_OUT_MAT_${i}`,"out", easeFunctionFadeOut, 0.1, 1.0)
+    const animationFadeOut = createFadeAnimation(`FADE_OUT_MAT_${i}`,"out", easeFunctionFadeOut, 0.1, 1.0)
     fadeOut.addTargetedAnimation(animationFadeOut,mat)
 
     const easeFunctionFadeIn = new BABYLON.QuarticEase()
     easeFunctionFadeIn.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEOUT);
 
-    const animationFadeIn = createFadeAnimation(mat,`FADE_OUT_MAT_${i}`,"in", easeFunctionFadeOut, 0.1, 1.0)
+    const animationFadeIn = createFadeAnimation(`FADE_OUT_MAT_${i}`,"in", easeFunctionFadeOut, 0.1, 1.0)
     fadeIn.addTargetedAnimation(animationFadeIn,mat)
 
 
