@@ -1,9 +1,12 @@
 import * as BABYLON from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
+import '@babylonjs/core/Debug/debugLayer';
+import * as I from '@babylonjs/inspector';
+
 
 import * as S from './states';
-import { importCascoCallBack } from './imports/importCasco';
 import { importWorkerCallback } from './imports/importWorker';
+import { importEarmuffsCallBack } from './imports/importEarmuffs';
 
 const canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
 const problemBtn = document.getElementById("problemaBtn") as HTMLButtonElement;
@@ -20,53 +23,41 @@ const createScene = () => {
 
 const createFontData = async () => {
   const fontData = await (await fetch("Roboto_Regular.json")).json()
-
-  // Font for text rendering
-  // const text = BABYLON.MeshBuilder.CreateText('myText', 'Taller de Invención y Creatividad', fontData, {
-  //   size: 2
-  // })
-  // if (text != null) {
-  //   text.position = new BABYLON.Vector3(0, 0, +10);
-  // }
   return fontData as BABYLON.IFontData;
 }
 
 const loadAssets = async (scene: BABYLON.Scene) => {
 
 
-  new BABYLON.Sound("factory",'factory.mp3',scene, null, {
+  new BABYLON.Sound("factory", 'factory.mp3', scene, null, {
     loop: true,
     autoplay: false,
   })
-  new BABYLON.Sound("muff",'muff.mp3',scene, null, {
-    loop: true,
-    autoplay: false,
-  })
-
-  new BABYLON.Sound("nice",'DivKid.mp3',scene, null, {
+  new BABYLON.Sound("muff", 'muff.mp3', scene, null, {
     loop: true,
     autoplay: false,
   })
 
-  BABYLON.SceneLoader.ImportMesh('', '', 'casco.gltf', scene, importCascoCallBack)
+  new BABYLON.Sound("nice", 'DivKid.mp3', scene, null, {
+    loop: true,
+    autoplay: false,
+  })
+
+
+  BABYLON.SceneLoader.ImportMesh('', '', 'earmuffs.gltf', scene, importEarmuffsCallBack)
 
   BABYLON.SceneLoader.ImportMesh('', '', 'worker.gltf', scene,
     importWorkerCallback("worker")
   );
 
 
-  BABYLON.SceneLoader.ImportMesh('', '', 'workerHappy.gltf', scene,
-    (meshes) => {
-      meshes[0].setEnabled(false);
-      meshes[0].name = "workerHappy"
-      meshes[1].name = "bodyHappy"
-      if (meshes[2].material) {
-        meshes[2].material.name = "cabezaHappy";
-        meshes[2].name = 'cabezaHappy'
+  const sadHeadTexture = new BABYLON.Texture("headSad.png", scene, true, false, BABYLON.Texture.NEAREST_SAMPLINGMODE);
+  sadHeadTexture.name = "sadHead"
+  sadHeadTexture.hasAlpha = true;
+  const happyHeadTexture = new BABYLON.Texture("headHappy.png", scene, true, false, BABYLON.Texture.NEAREST_SAMPLINGMODE);
+  happyHeadTexture.name = "happyHead"
+  happyHeadTexture.hasAlpha = true;
 
-      }
-    }
-  );
 
   const envTexture = new BABYLON.CubeTexture("environment.env", scene);
   envTexture.name = "envTexture"
@@ -124,4 +115,7 @@ Promise.all([initScene(createScene()), createFontData()]).then(([scene, fontData
   window.addEventListener('resize', () => {
     engine.resize();
   });
+  
+
+  // I.Inspector.Show(scene, {});
 })

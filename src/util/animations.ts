@@ -38,23 +38,37 @@ export const createMovementAnimation = (
 
   moveAnimation.setKeys(keysPosition);
 
-  const fadeAnimation = new BABYLON.Animation(`fade${inOut}${name}`, 'visibility', 60, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
-  fadeAnimation.setEasingFunction(easeFunction);
-
-  const keysVisibility = [
-    { frame: 0, value: inOut === 'in' ? 0.0 : 1.0 },
-    { frame: 100, value: inOut === 'in' ? 1.0 : 0.0 }
-  ];
-
-  fadeAnimation.setKeys(keysVisibility);
-
   model.animations.push(moveAnimation);
-  model.animations.push(fadeAnimation);
 
   const animationGroup = new BABYLON.AnimationGroup(`${inOut.toUpperCase()}_${name.toUpperCase()}`);
   animationGroup.addTargetedAnimation(moveAnimation, model);
-  animationGroup.addTargetedAnimation(fadeAnimation, model);
   animationGroup.loopAnimation = false;
 
   return animationGroup;
+}
+
+export const createFadeAnimation = (
+  material: BABYLON.PBRMaterial,
+  name: string,
+  inOut: 'in' | 'out',
+  easeFunction: BABYLON.EasingFunction,
+  low: number = 0,
+  up: number = 1,
+) => {
+
+  const fadeAnimation = new BABYLON.Animation(`fade${inOut}${name}`, 'alpha', 60, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+
+  fadeAnimation.setEasingFunction(easeFunction)
+
+  const keysPosition = [
+    { frame: 0, value: inOut === 'in' ? low : up },
+    { frame: 60, value: inOut === 'in' ? up : low }
+  ]
+
+  fadeAnimation.setKeys(keysPosition);
+
+  // material.animations!.push(fadeAnimation);
+
+
+  return fadeAnimation;
 }

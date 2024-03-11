@@ -51,10 +51,10 @@ const texts2 = {
 
 const explainState: State = {
     loadState: async (scene: BABYLON.Scene, ctx) => {
-        const earmuffsMesh = getMeshOrThrow(scene, 'casco');
+        const earmuffsMesh = getMeshOrThrow(scene, 'earmuffs');
         const openEarmuffsAnimation = getAnimationGroupOrThrow(scene, "OPEN");
         const closeEarmuffsAnimation = getAnimationGroupOrThrow(scene, "CLOSE")
-        const inEarmuffsAnimation = getAnimationGroupOrThrow(scene, "IN_CASCO")
+        const inEarmuffsAnimation = getAnimationGroupOrThrow(scene, "IN_EARMUFFS")
         const niceAmbientSound = getSoundOrThrow(scene, 'nice');
 
 
@@ -99,11 +99,11 @@ const explainState: State = {
         delete scene.onPointerDown;
         cleanText(scene);
 
-        const earmuffsMesh = getMeshOrThrow(scene, 'casco')
+        const earmuffsMesh = getMeshOrThrow(scene, 'earmuffs')
 
         const niceAmbienSound = getSoundOrThrow(scene, 'nice');
         const closeEarmuffsAnimation = getAnimationGroupOrThrow(scene, "CLOSE")
-        const outEarmuffsAnimation = getAnimationGroupOrThrow(scene, "OUT_CASCO")
+        const outEarmuffsAnimation = getAnimationGroupOrThrow(scene, "OUT_EARMUFFS")
 
         await playAsync(closeEarmuffsAnimation);
 
