@@ -100,13 +100,15 @@ body #extraUI {
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
   position: relative;
   max-width: 30vw;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
   max-height: 60vh;
 }
 #extraUI .info ol {
   font-size: 11px;
   line-height: 1.2;
   margin-bottom: 12px;
+  margin-left: -2em;
 }
 #extraUI .info ul {
   font-size: 14px;
